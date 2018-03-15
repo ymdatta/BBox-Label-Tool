@@ -36,12 +36,12 @@ class LabelTool():
         self.outDir = ''
         self.cur = 0
         self.total = 0
-        self.category = 1#already loaded it as 1,cuz thats what im using
+        self.category = 1
         self.imagename = ''
         self.labelfilename = ''
         self.tkimg = None
 
-        self.label_number_map = ["","Car","2 wheeler","Bus","Truck","Auto"]
+        self.label_number_map = ["","Car","2 wheeler","Bus","Truck","Auto"] #map for number to label name
         self.reverse_label_map = {"":0,"Car":1,"2 wheeler":2,"Bus":3,"Truck":4,"Auto":5}
 
         # initialize mouse state
@@ -65,38 +65,39 @@ class LabelTool():
         self.entry.grid(row = 0, column = 1, sticky = W+E)
         self.ldBtn = Button(self.frame, text = "Load", command = self.loadDir)
         self.ldBtn.grid(row = 0, column = 2, sticky = W+E)
+
+        #buttons for adding labels
         self.label_1_Btn = Button(self.frame, text = "Car(1)",width = 16,command = self.addLabel1)
         self.label_1_Btn.grid(row = 0, column = 3, sticky = N+E)
+
         self.label_2_Btn = Button(self.frame, text = "2 Wheeler(2)",width = 16,command = self.addLabel2)
         self.label_2_Btn.grid(row = 0, column = 4, sticky = N+E)
+
         self.label_3_Btn = Button(self.frame, text = "Bus(3)",width = 16,command = self.addLabel3)
         self.label_3_Btn.grid(row = 1, column = 3, sticky = N+E)
+
         self.label_4_Btn = Button(self.frame, text = "Truck(4)",width = 16,command = self.addLabel4)
         self.label_4_Btn.grid(row = 1, column = 4, sticky = N+E)
+
         self.label_5_Btn = Button(self.frame, text = "Auto(5)",width = 16,command = self.addLabel5)
         self.label_5_Btn.grid(row = 2, column = 3, sticky = N+E)
-        #these seem like names given here and probably no initialization is needed since these names don't appear anywhere else
-        #columns are just 0,1,2
 
         # main panel for labeling
         self.mainPanel = Canvas(self.frame, cursor='tcross')
         self.mainPanel.bind("<Button-1>", self.mouseClick)
         self.mainPanel.bind("<Motion>", self.mouseMove)
         self.parent.bind("<Escape>", self.cancelBBox)  # press <Espace> to cancel current bbox
-        self.parent.bind("1",self.addLabel1)
+        self.parent.bind("1",self.addLabel1) #to add the corresponding label
         self.parent.bind("2",self.addLabel2)
         self.parent.bind("3",self.addLabel3)
         self.parent.bind("4",self.addLabel4)
         self.parent.bind("5",self.addLabel5)
         self.parent.bind("s", self.cancelBBox)
-        self.parent.bind("a", self.prevImage) # press 'a' to go backforward
-        # self.parent.bind("<space>", self.nextImage) # press ' ' to go forward
+        self.parent.bind("a", self.prevImage)
+        self.parent.bind("<Left>", self.prevImage) #arrow keys for navigation
+        self.parent.bind("<Right>", self.nextImage)
         self.parent.bind("<Button-3>", self.nextImage) # right click to go forward
         self.mainPanel.grid(row = 1, column = 1, rowspan = 4, sticky = W+N)
-
-        # self.parent.bind("1", self.addLabel1)
-        #here opened the main panel and bound certain keys(inputs) to certain functions defined later
-        #bind keys to classes here
 
         # showing bbox info & delete bbox
         self.lb1 = Label(self.frame, text = 'Bounding boxes:')
@@ -141,10 +142,6 @@ class LabelTool():
         self.frame.columnconfigure(1, weight = 1)
         self.frame.rowconfigure(4, weight = 1)
 
-        # for debugging
-##        self.setImage()
-##        self.loadDir()
-
     def loadDir(self, dbg = False):
         if not dbg:
             s = self.entry.get()
@@ -152,13 +149,9 @@ class LabelTool():
             self.category = int(s)
         else:
             s = r'D:\workspace\python\labelGUI'
-##        if not os.path.isdir(s):
-##            tkMessageBox.showerror("Error!", message = "The specified dir doesn't exist!")
-##            return
-        # get image list
+
         self.imageDir = os.path.join(r'./Images', '%03d' %(self.category))
         self.imageList = sorted(glob.glob(os.path.join(self.imageDir, '*.jpg')))
-        print "imageList =",self.imageList
         if len(self.imageList) == 0:
             print 'No .JPEG images found in the specified dir!'
             return
@@ -167,7 +160,7 @@ class LabelTool():
         self.cur = 1
         self.total = len(self.imageList)
 
-         # set up output dir
+        # set up output dir
         self.outDir = os.path.join(r'./Labels', '%03d' %(self.category))
         if not os.path.exists(self.outDir):
             os.mkdir(self.outDir)
@@ -179,7 +172,6 @@ class LabelTool():
         filelist = glob.glob(os.path.join(self.egDir, '*.jpg'))
         self.tmp = []
         self.egList = []
-        #random.shuffle(filelist)
         print "filelist =",filelist
         for (i, f) in enumerate(filelist):
         	print "in the loop"
@@ -227,7 +219,6 @@ class LabelTool():
                     else:
                         tmp = [int(t.strip()) for t in line.split()]
                         tmp = [int(tmp[0]/2),int(tmp[1]/1.6),int(tmp[2]/2),int(tmp[3]/1.6)]
-    ##                    print tmp
                         self.bboxList.append(tuple(tmp))
                         self.bbox_labels_list.append(loaded_label_num)
                         tmpId = self.mainPanel.create_rectangle(tmp[0], tmp[1], \
@@ -246,8 +237,7 @@ class LabelTool():
                 bbox = self.bboxList[i]
                 bbox = (bbox[0]*2,int(bbox[1]*1.6),bbox[2]*2,int(bbox[3]*1.6))
 
-                print "i =",i
-                f.write(self.label_number_map[self.bbox_labels_list[i]] + '\n')
+                f.write(self.label_number_map[self.bbox_labels_list[i]] + '\n')#writing the label string onto the file and not the number
 
                 f.write(' '.join(map(str, bbox)) + '\n')
         print 'Image No. %d saved' %(self.cur)
@@ -305,6 +295,7 @@ class LabelTool():
         self.bbox_labels_list.pop(idx)
         self.listbox.delete(idx)
 
+    #action for first label button
     def addLabel1(self,event = None):
         sel = self.listbox.curselection()
         if len(sel) != 1 :
@@ -403,13 +394,6 @@ class LabelTool():
             self.saveImage()
             self.cur = idx
             self.loadImage()
-
-##    def setImage(self, imagepath = r'test2.png'):
-##        self.img = Image.open(imagepath)
-##        self.tkimg = ImageTk.PhotoImage(self.img)
-##        self.mainPanel.config(width = self.tkimg.width())
-##        self.mainPanel.config(height = self.tkimg.height())
-##        self.mainPanel.create_image(0, 0, image = self.tkimg, anchor=NW)
 
 if __name__ == '__main__':
     root = Tk()
