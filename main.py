@@ -40,6 +40,7 @@ class LabelTool():
         self.imagename = ''
         self.labelfilename = ''
         self.tkimg = None
+        self.curr_label_num = 0
 
         self.label_number_map = ["","Car","2 wheeler","Bus","Truck","Auto"] #map for number to label name
         self.reverse_label_map = {"":0,"Car":1,"2 wheeler":2,"Bus":3,"Truck":4,"Auto":5}
@@ -93,7 +94,7 @@ class LabelTool():
         self.parent.bind("4",self.addLabel4)
         self.parent.bind("5",self.addLabel5)
         self.parent.bind("s", self.cancelBBox)
-        self.parent.bind("a", self.prevImage)
+        self.parent.bind("d", self.prevImage)#changed here
         self.parent.bind("<Left>", self.prevImage) #arrow keys for navigation
         self.parent.bind("<Right>", self.nextImage)
         self.parent.bind("<Button-3>", self.nextImage) # right click to go forward
@@ -108,6 +109,10 @@ class LabelTool():
         self.btnDel.grid(row = 3, column = 2, sticky = W+E+N)
         self.btnClear = Button(self.frame, text = 'ClearAll', command = self.clearBBox)
         self.btnClear.grid(row = 4, column = 2, sticky = W+E+N)
+        self.curr_val_indicate = Label(self.frame, text = 'Current selection:')
+        self.curr_val_marked = Label(self.frame, text = self.label_number_map[1])
+        self.curr_val_indicate.grid(row = 6,column = 3)
+        self.curr_val_marked.grid(row = 6,column = 4)
 
         # control panel for image navigation
         self.ctrPanel = Frame(self.frame)
@@ -251,11 +256,11 @@ class LabelTool():
             y1, y2 = min(self.STATE['y'], event.y), max(self.STATE['y'], event.y)
             self.bboxList.append((x1, y1, x2, y2))
 
-            self.bbox_labels_list.append(0)  #since no label assigned till now.do that in the button action
+            self.bbox_labels_list.append(self.curr_label_num)  #marking the class picked
 
             self.bboxIdList.append(self.bboxId)
             self.bboxId = None
-            self.listbox.insert(END, '(%d, %d) -> (%d, %d) : %d' %(x1, y1, x2, y2,0)) #the last one is the class of the label assigned
+            self.listbox.insert(END, '(%d, %d) -> (%d, %d) : %d' %(x1, y1, x2, y2,self.curr_label_num))
             self.listbox.itemconfig(len(self.bboxIdList) - 1, fg = COLORS[(len(self.bboxIdList) - 1) % len(COLORS)])
 
         self.STATE['click'] = 1 - self.STATE['click']
@@ -297,74 +302,24 @@ class LabelTool():
 
     #action for first label button
     def addLabel1(self,event = None):
-        sel = self.listbox.curselection()
-        if len(sel) != 1 :
-            return
-
-        #edit the label and what comes in the box
-        idx = int(sel[0])
-        self.bbox_labels_list[idx] = 1
-
-        temp = self.bboxList[idx]
-        self.listbox.delete(idx)
-        self.listbox.insert(idx, '(%d, %d) -> (%d, %d) : %d' %(temp[0],temp[1],temp[2],temp[3],1))
-        self.listbox.itemconfig(idx,fg = COLORS[(idx) % len(COLORS)])
+        self.curr_label_num = 1
+        self.curr_val_marked.config(text = self.label_number_map[1])
 
     def addLabel2(self,event = None):
-        sel = self.listbox.curselection()
-        if len(sel) != 1 :
-            return
-
-        #edit the label and what comes in the box
-        idx = int(sel[0])
-        self.bbox_labels_list[idx] = 2
-
-        temp = self.bboxList[idx]
-        self.listbox.delete(idx)
-        self.listbox.insert(idx, '(%d, %d) -> (%d, %d) : %d' %(temp[0],temp[1],temp[2],temp[3],2))
-        self.listbox.itemconfig(idx,fg = COLORS[(idx) % len(COLORS)])
+        self.curr_label_num = 2
+        self.curr_val_marked.config(text = self.label_number_map[2])
 
     def addLabel3(self,event = None):
-        sel = self.listbox.curselection()
-        if len(sel) != 1 :
-            return
-
-        #edit the label and what comes in the box
-        idx = int(sel[0])
-        self.bbox_labels_list[idx] = 3
-
-        temp = self.bboxList[idx]
-        self.listbox.delete(idx)
-        self.listbox.insert(idx, '(%d, %d) -> (%d, %d) : %d' %(temp[0],temp[1],temp[2],temp[3],3))
-        self.listbox.itemconfig(idx,fg = COLORS[(idx) % len(COLORS)])
+        self.curr_label_num = 3
+        self.curr_val_marked.config(text = self.label_number_map[3])
 
     def addLabel4(self,event = None):
-        sel = self.listbox.curselection()
-        if len(sel) != 1 :
-            return
-
-        #edit the label and what comes in the box
-        idx = int(sel[0])
-        self.bbox_labels_list[idx] = 4
-
-        temp = self.bboxList[idx]
-        self.listbox.delete(idx)
-        self.listbox.insert(idx, '(%d, %d) -> (%d, %d) : %d' %(temp[0],temp[1],temp[2],temp[3],4))
-        self.listbox.itemconfig(idx,fg = COLORS[(idx) % len(COLORS)])
+        self.curr_label_num = 4
+        self.curr_val_marked.config(text = self.label_number_map[4])
 
     def addLabel5(self,event = None):
-        sel = self.listbox.curselection()
-        if len(sel) != 1 :
-            return
-
-        #edit the label and what comes in the box
-        idx = int(sel[0])
-        self.bbox_labels_list[idx] = 5
-
-        temp = self.bboxList[idx]
-        self.listbox.delete(idx)
-        self.listbox.insert(idx, '(%d, %d) -> (%d, %d) : %d' %(temp[0],temp[1],temp[2],temp[3],5))
-        self.listbox.itemconfig(idx,fg = COLORS[(idx) % len(COLORS)])
+        self.curr_label_num = 5
+        self.curr_val_marked.config(text = self.label_number_map[5])
 
     #too much repeated code. make this neater
 
