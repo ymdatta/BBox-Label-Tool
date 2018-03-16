@@ -45,9 +45,10 @@ Usage
   -----------------------------
   1. The tool now supports adding class labels to a bounding box.
   2. Each class has been assigned a number.
-  3. Each bounding box has been assigned a label. If no label is specified, the box is allocated '0'.
-  4. To allocate a label to a box select it from the list of bounding boxes and press the button corresponding to the class you want to allocate it to (or press the corresponding number key).
-  5. Be sure to click `Next` (or `Prev` ) after finishing to save your changes.
-  6. The label number to text correspondance can be changed by editing the map on `line 44` of main.py ( and changing the text on the button too!)
+  3. Each bounding box has been assigned a label.
+  4. Select the class you want to mark by clicking the corresponding button. The current selection is indicated in the bottom right corner.
+  5. Any bounding box marked now is given a label corresponding to this selection.
+  6. Be sure to click `Next` (or `Prev` ) after finishing to save your changes.
+  7. The label number to text correspondance can be changed by editing the map on `line 44` of main.py ( and changing the text on the button too!)
 
   *NOTE*: The text file with the bounding boxes stores the text and not the number.
