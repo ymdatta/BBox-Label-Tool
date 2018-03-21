@@ -55,7 +55,7 @@ Usage
   
   **Usage of Automation  scripts.**
   
-  0. The scripts helps in automation of tasks like making seperate directories for each video file with folder names 001/002/etc, also helps in automating running  python script which helps in dividing the video into frames.
+  0. The scripts helps in automation of tasks like making seperate directories for each video file with folder names 001/002/etc, also helps in automating running  python script which helps in dividing the video into frames.(Scripts can be found in the Scripts folder.)
   
   1. First set executable permission to all script files.
    
