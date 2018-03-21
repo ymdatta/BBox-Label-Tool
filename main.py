@@ -94,9 +94,10 @@ class LabelTool():
         self.parent.bind("4",self.addLabel4)
         self.parent.bind("5",self.addLabel5)
         self.parent.bind("s", self.cancelBBox)
-        self.parent.bind("d", self.prevImage)#changed here
         self.parent.bind("<Left>", self.prevImage) #arrow keys for navigation
         self.parent.bind("<Right>", self.nextImage)
+        self.parent.bind("a", self.prevImage) #for navigation
+        self.parent.bind("d", self.nextImage)
         self.parent.bind("<Button-3>", self.nextImage) # right click to go forward
         self.mainPanel.grid(row = 1, column = 1, rowspan = 4, sticky = W+N)
 
@@ -111,8 +112,8 @@ class LabelTool():
         self.btnClear.grid(row = 4, column = 2, sticky = W+E+N)
         self.curr_val_indicate = Label(self.frame, text = 'Current selection:')
         self.curr_val_marked = Label(self.frame, text = self.label_number_map[1])
-        self.curr_val_indicate.grid(row = 6,column = 3)
-        self.curr_val_marked.grid(row = 6,column = 4)
+        self.curr_val_indicate.grid(row = 4,column = 3)
+        self.curr_val_marked.grid(row = 4,column = 4)
 
         # control panel for image navigation
         self.ctrPanel = Frame(self.frame)
