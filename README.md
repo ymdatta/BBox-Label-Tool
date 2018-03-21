@@ -59,7 +59,7 @@ Usage
   
   1. First set executable permission to all script files.
    
-> $ chmod +x *.sh
+> $ chmod +x  *.sh
   
   2. Now, first run ./no_of_mp4.sh to find the total no of mp4 files present.
   
