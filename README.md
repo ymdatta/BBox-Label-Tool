@@ -51,3 +51,29 @@ Usage
   6. The label number to text correspondance can be changed by editing the map on `line 44` of main.py ( and changing the text on the button too!)
 
   *NOTE*: The text file with the bounding boxes stores the text and not the number.
+  
+  
+  **Usage of Automation  scripts.**
+  
+  0. The scripts helps in automation of tasks like making seperate directories for each video file with folder names 001/002/etc, also helps in automating running  python script which helps in dividing the video into frames.
+  
+  1. First set executable permission to all script files.
+   
+> $ chmod +x *.sh
+  
+  2. Now, first run ./no_of_mp4.sh to find the total no of mp4 files present.
+  
+>    $ ./no_of_mp4.sh
+   
+  3. It will return a number, now create directories using mkdir {000..00N}
+  
+> ex: say there are 130 files then
+
+> $ mkdir {000..130}
+ 
+  4. Now run copy_script.sh which moves each mp4 file to a folder.
+>    $ ./copy_script.sh
+  5. Now final step, run the run_script.sh, which runs the vid.py file in each and every folder.    
+>   $ ./run_script.sh
+>    
+  All the images rendered from the folder's mp4 will be stored in that folder only.
